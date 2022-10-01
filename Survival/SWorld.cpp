@@ -6,7 +6,7 @@ SWorld::SWorld() : SEntity()
 	hud = { 0 };
 	hud.zoom = 0.5f;
 
-    player = new Player(&this->camera);
+    player = new Player(&this->camera, &this->physics);
 }
 
 void SWorld::UpdateFrame()
@@ -20,11 +20,18 @@ void SWorld::UpdateFrame()
     rlEnableBackfaceCulling();
     rlEnableDepthMask();
 
-    DrawModel(floor, { -100, 0, -100 }, 1.f, GREEN);
+    DrawModel(floor, this->floorPosition, 1.f, GREEN);
     //DrawModelWires(floor, { -100, 0, -100 }, 1.f, RED);
-    EndMode3D();
 
+#ifdef _DEBUG
+    DrawGrid(200, 1.f);
+#endif // _DEBUG
+
+    EndMode3D();
+    
+    this->physics.Update();
     this->player->UpdateFrame();
+
 
     BeginMode2D(hud);
     Camera3D cam = this->camera.GetCamera();
@@ -38,7 +45,7 @@ void SWorld::UpdateFrame()
         "\n\Rotation" + Vector3String(this->camera.rotation) +
         "\n\nVelocity" + Vector3String(vel) +
         "\n\nTPS Distance: "+std::to_string(this->camera.targetDistance) +
-        "\n\n" + Vector3String(playerhCam.position) + "\n"+Vector3String(playerhCam.target);
+        "\nInterations per step: " +std::to_string(this->physics.GetInterationsPerStep());
 
     static Vector2  rectSize = MeasureTextEx(GetFontDefault(), debug.c_str(), 20, 0);
 
@@ -48,26 +55,21 @@ void SWorld::UpdateFrame()
     DrawText(debug.c_str(), 30, 60, 20, BLACK);
 
     EndMode2D();
-
-    
 }
 
 void SWorld::Load()
 {
-    camera.Init({ 0, 1, 0 }, { 0 }, 90.f);
+    this->camera.Init({ 0, 1, 0 }, { 0 }, 90.f);
+    this->physics.Init({ 0, -9.8, 0 }, -1);
 
     Image m = LoadImage("./assets/textures/heightmap.png");
     floor = LoadModelFromMesh(GenMeshHeightmap(m, { 200, 15, 200 }));
     floor.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = LoadTexture("./assets/textures/grass.png");//LoadTextureFromImage(m);
     UnloadImage(m);
-
-    /*
-    https://www.reddit.com/r/raylib/comments/jyfh1h/how_to_properly_collide_with_mesh_height_map/ -> ?
-
-    https://gamedev.stackexchange.com/questions/31844/checking-for-collisions-on-a-3d-heightmap or https://gamedev.stackexchange.com/questions/79431/collision-between-player-and-heightmap -> hard
-
-    http://bedroomcoders.co.uk/raylib-adding-a-static-terrain-ode/ and http://bedroomcoders.co.uk/aligning-a-model-with-a-terrain-raylib/ -> best (ODE)
-    */
+    
+    this->floorPosition = { -100, 0, -100 };
+    this->physics.SetTerrain(floor.meshes[0].vertexCount, floor.meshes[0].vertices);
+    this->physics.SetTerrainPosition(this->floorPosition);
 
     sky = LoadModelFromMesh(GenMeshCube(1.0f, 1.0f, 1.0f));
     sky.materials[0].shader = LoadShader("./assets/shaders/sky.vs", "./assets/shaders/sky.fs");

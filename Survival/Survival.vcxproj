@@ -79,7 +79,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -109,7 +109,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -132,18 +132,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="modelcol.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SCamera.cpp" />
     <ClCompile Include="SEntity.cpp" />
+    <ClCompile Include="SPhysics.cpp" />
     <ClCompile Include="SWindow.cpp" />
     <ClCompile Include="SWorld.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="modelcol.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="SCamera.h" />
     <ClInclude Include="SEntity.h" />
+    <ClInclude Include="SPhysics.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="SWindow.h" />
     <ClInclude Include="SWorld.h" />

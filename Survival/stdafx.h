@@ -28,7 +28,7 @@
 #endif
 
 #include <ode/ode.h>
-
+#include <pthread.h>
 
 inline std::string SGetParentPath(std::string p)
 {

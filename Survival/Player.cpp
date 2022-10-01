@@ -1,8 +1,9 @@
 #include "Player.h"
 
-Player::Player(SCamera* worldCam) : SEntity()
+Player::Player(SCamera* worldCam, SPhysics* physics)
 {
-	this->camera = worldCam;
+    this->camera = worldCam;
+    this->physics = physics;
 }
 
 void Player::UpdateFrame()
@@ -60,8 +61,12 @@ void Player::UpdateFrame()
 
     if (this->camMode == SCameraMode::ThirdPerson)
     {
+        Vector3* objData = this->physics->GetObjectData(this->id);
+        this->camera->SetTarget(objData[0]);
         camera->UpdateThird(velocity);
-        
+        this->physics->UpdateObjectData(this->id, velocity, this->camera->rotation);
+       
+
         BeginMode3D(this->camera->GetCamera());
         
         this->skin.transform = MatrixRotateY(this->camera->rotation.x);
@@ -70,9 +75,17 @@ void Player::UpdateFrame()
         EndMode3D();
     }
     else {
+        Vector3* objData = this->physics->GetObjectData(this->id);
+
+        this->camera->rotation.x += objData[1].x - this->lastRotation.x;
+        this->camera->rotation.y += objData[1].y - this->lastRotation.y;
+        this->lastRotation = objData[1];
+
+        this->camera->SetPosition(objData[0]);
         camera->UpdateFirst(velocity);
-
-
+        this->physics->UpdateObjectData(this->id, velocity, this->camera->rotation);
+        
+        
         bool targetMode = false;
         if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
         {
@@ -138,7 +151,10 @@ void Player::UpdateFrame()
 
         DrawTexturePro(playerHands.texture, { 0, 0, (float)GetRenderWidth(), (float)-GetRenderHeight() }, { 0, 0, (float)GetRenderWidth(), (float)GetRenderHeight() }, { 0,0 }, 0, WHITE);
         DrawCircle(GetRenderWidth() / 2, GetRenderHeight() / 2, 3, RED);
+    
     }
+
+    
 }
 
 void Player::Load()
@@ -154,6 +170,9 @@ void Player::Load()
 
     gun = LoadModel("./assets/models/gun/model.obj");
     skin = LoadModelFromMesh(GenMeshCube(2, 2, 2));
+
+    this->id = this->physics->CreateBoxObject({ 5, 15, 5 }, {2,2,2}, 1);
+
 }
 
 void Player::UnLoad()

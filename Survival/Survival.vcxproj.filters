@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Fichiers d%27en-tête\test">
-      <UniqueIdentifier>{9d472b98-a1c1-4fa3-b9c1-19415704cde8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Fichiers d%27en-tête\entities">
       <UniqueIdentifier>{6dbf9af4-8b6b-4739-b10a-e120d752a1f5}</UniqueIdentifier>
     </Filter>
@@ -36,11 +33,11 @@
     <ClCompile Include="SWorld.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="modelcol.cpp">
-      <Filter>Fichiers d%27en-tête\test</Filter>
-    </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Fichiers d%27en-tête\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="SPhysics.cpp">
+      <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -59,11 +56,11 @@
     <ClInclude Include="SWorld.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="modelcol.h">
-      <Filter>Fichiers d%27en-tête\test</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Fichiers d%27en-tête\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="SPhysics.h">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
